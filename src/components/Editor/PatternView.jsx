@@ -30,7 +30,7 @@ const PatternView = ({ pattern, levelName, description, challengeType }) => {
             }}>
                 {description && (
                     <div className="description-section">
-                        <h4 style={{ color: '#00ff41', fontFamily: 'monospace', marginBottom: '10px' }}>&gt; OBJECTIVE:</h4>
+                        <h4 style={{ color: '#00e5ff', fontFamily: 'monospace', marginBottom: '10px' }}>&gt; OBJECTIVE:</h4>
                         <p style={{ color: '#ccc', fontFamily: 'monospace', lineHeight: '1.6', fontSize: '0.95rem' }}>
                             {description}
                         </p>
@@ -42,8 +42,8 @@ const PatternView = ({ pattern, levelName, description, challengeType }) => {
                         &gt; {challengeType === 'pattern' ? 'EXPECTED_PATTERN:' : 'EXPECTED_OUTPUT:'}
                     </h4>
                     <pre style={{
-                        color: challengeType === 'pattern' ? '#ff00ff' : '#00ff41',
-                        textShadow: challengeType === 'pattern' ? '0 0 5px #ff00ff' : '0 0 5px #00ff41',
+                        color: challengeType === 'pattern' ? '#ff00ff' : '#00e5ff',
+                        textShadow: challengeType === 'pattern' ? '0 0 5px #ff00ff' : '0 0 5px #00e5ff',
                         fontFamily: 'monospace',
                         fontSize: '1.2rem',
                         lineHeight: '1.4',

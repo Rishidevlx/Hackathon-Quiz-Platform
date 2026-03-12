@@ -11,7 +11,7 @@ const Terminal = ({ logs = [], onClear }) => {
         <div className="terminal-container" style={{
             height: '100%',
             background: '#0a0a10',
-            color: '#00ff00',
+            color: '#00e5ff',
             fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
             padding: '10px',
             overflowY: 'auto',
@@ -47,7 +47,7 @@ const Terminal = ({ logs = [], onClear }) => {
                     <div key={index} style={{
                         marginBottom: '4px',
                         color: log.type === 'error' ? '#ff5555' :
-                            log.type === 'system' ? '#00ffff' : '#00ff00',
+                            log.type === 'system' ? '#00ffff' : '#00e5ff',
                         whiteSpace: 'pre-wrap',
                         wordBreak: 'break-word'
                     }}>

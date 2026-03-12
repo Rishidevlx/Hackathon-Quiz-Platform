@@ -661,7 +661,7 @@ const EditorLayout = ({ userData, onLogout }) => {
                     <div className="brand" style={{
                         fontFamily: 'Orbitron',
                         color: typeof isSessionActive !== 'undefined' && !isSessionActive ? '#555' : '#00ffff',
-                        fontWeight: 'bold', fontSize: '1.2rem', textShadow: isSessionActive ? '0 0 10px rgba(0, 255, 255, 0.6)' : 'none', transition: 'color 0.3s'
+                        fontWeight: 'bold', fontSize: '1.2rem', textShadow: isSessionActive ? '0 0 10px rgba(0, 229, 255, 0.5)' : 'none', transition: 'color 0.3s'
                     }}>
                         HACKATHON_2K26_BCA
                     </div>
@@ -675,8 +675,8 @@ const EditorLayout = ({ userData, onLogout }) => {
                         disabled={isSessionActive || (userData.dbCodeData && JSON.parse(userData.dbCodeData).language)}
                         title={(userData.dbCodeData && JSON.parse(userData.dbCodeData).language) ? "Language locked for this session" : "Select language before starting"}
                         style={{
-                            background: '#000', color: (isSessionActive || (userData.dbCodeData && JSON.parse(userData.dbCodeData).language)) ? '#777' : '#00ff41', border: '2px solid #00ff41', padding: '6px 15px', borderRadius: '4px', fontFamily: 'Orbitron, sans-serif', outline: 'none', cursor: (isSessionActive || (userData.dbCodeData && JSON.parse(userData.dbCodeData).language)) ? 'not-allowed' : 'pointer', opacity: (isSessionActive || (userData.dbCodeData && JSON.parse(userData.dbCodeData).language)) ? 0.6 : 1,
-                            boxShadow: '0 0 15px rgba(0, 255, 65, 0.4)', fontWeight: 'bold', letterSpacing: '1px', transition: 'all 0.3s'
+                            background: '#000', color: (isSessionActive || (userData.dbCodeData && JSON.parse(userData.dbCodeData).language)) ? '#777' : '#00e5ff', border: '2px solid #00e5ff', padding: '6px 15px', borderRadius: '4px', fontFamily: 'Orbitron, sans-serif', outline: 'none', cursor: (isSessionActive || (userData.dbCodeData && JSON.parse(userData.dbCodeData).language)) ? 'not-allowed' : 'pointer', opacity: (isSessionActive || (userData.dbCodeData && JSON.parse(userData.dbCodeData).language)) ? 0.6 : 1,
+                            boxShadow: '0 0 15px rgba(0, 229, 255, 0.4)', fontWeight: 'bold', letterSpacing: '1px', transition: 'all 0.3s'
                         }}
                     >
                         <option value="c">C (GCC 10.2)</option>
@@ -686,7 +686,7 @@ const EditorLayout = ({ userData, onLogout }) => {
                     {!isSessionActive ? (
                         isSuccess ? (
                             <button style={{
-                                background: '#00ff00', border: 'none', padding: '8px 30px', color: '#000', fontWeight: 'bold', fontFamily: 'Orbitron', cursor: 'default', borderRadius: '2px', boxShadow: '0 0 15px rgba(0, 255, 0, 0.6)', fontSize: '0.9rem', opacity: 1
+                                background: '#00e5ff', border: 'none', padding: '8px 30px', color: '#000', fontWeight: 'bold', fontFamily: 'Orbitron', cursor: 'default', borderRadius: '2px', boxShadow: '0 0 15px rgba(0, 255, 0, 0.6)', fontSize: '0.9rem', opacity: 1
                             }}>SYSTEM MATCHED</button>
                         ) : (
                             <button onClick={handleStartSession} style={{
@@ -695,12 +695,12 @@ const EditorLayout = ({ userData, onLogout }) => {
                         )
                     ) : (
                         completedPatterns.includes(currentPattern?.id) ? (
-                            <span style={{ color: '#00ff41', fontFamily: 'Orbitron', fontSize: '0.9rem', fontWeight: 'bold', textShadow: '0 0 10px rgba(0,255,65,0.5)' }}>
+                            <span style={{ color: '#00e5ff', fontFamily: 'Orbitron', fontSize: '0.9rem', fontWeight: 'bold', textShadow: '0 0 10px rgba(0,255,65,0.5)' }}>
                                 [ PATTERN SECURED ]
                             </span>
                         ) : (
                             <button onClick={handleRun} disabled={isRunning || isSuccess} style={{
-                                background: isSuccess ? '#00ff00' : (isRunning ? '#444' : '#00cc00'), border: 'none', padding: '8px 25px', color: isSuccess ? '#000' : '#fff', fontWeight: 'bold', fontFamily: 'Orbitron', display: 'flex', alignItems: 'center', gap: '8px', cursor: (isRunning || isSuccess) ? 'default' : 'pointer', borderRadius: '2px', boxShadow: isRunning ? 'none' : '0 0 15px rgba(0, 204, 0, 0.6)', textShadow: '0 0 5px black'
+                                background: isSuccess ? '#00e5ff' : (isRunning ? '#444' : '#00a2ff'), border: 'none', padding: '8px 25px', color: isSuccess ? '#000' : '#fff', fontWeight: 'bold', fontFamily: 'Orbitron', display: 'flex', alignItems: 'center', gap: '8px', cursor: (isRunning || isSuccess) ? 'default' : 'pointer', borderRadius: '2px', boxShadow: isRunning ? 'none' : '0 0 15px rgba(0, 204, 0, 0.6)', textShadow: '0 0 5px black'
                             }}>{isSuccess ? 'MATCHED!' : (isRunning ? 'EXECUTING...' : 'RUN_CODE')}</button>
                         )
                     )}
@@ -709,21 +709,21 @@ const EditorLayout = ({ userData, onLogout }) => {
                 {/* Right: Timer & User Stats */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
                     <div className="timer" style={{
-                        fontFamily: '"Share Tech Mono", monospace', fontSize: '1.8rem', color: isSuccess ? '#00ff00' : '#ff0055', background: 'rgba(0,0,0,0.5)', padding: '0px 15px', borderRadius: '4px', border: `2px solid ${isSuccess ? '#00ff00' : '#ff0055'}`, boxShadow: `0 0 15px ${isSuccess ? '#00ff00' : '#ff0055'}`, textShadow: `0 0 10px ${isSuccess ? '#00ff00' : '#ff0055'}`, display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 'bold', letterSpacing: '2px', minWidth: '220px', justifyContent: 'center'
+                        fontFamily: '"Share Tech Mono", monospace', fontSize: '1.8rem', color: isSuccess ? '#00e5ff' : '#ff0055', background: 'rgba(0,0,0,0.5)', padding: '0px 15px', borderRadius: '4px', border: `2px solid ${isSuccess ? '#00e5ff' : '#ff0055'}`, boxShadow: `0 0 15px ${isSuccess ? '#00e5ff' : '#ff0055'}`, textShadow: `0 0 10px ${isSuccess ? '#00e5ff' : '#ff0055'}`, display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 'bold', letterSpacing: '2px', minWidth: '220px', justifyContent: 'center'
                     }}>
                         <span>{formatTime(metrics.time)}</span>
                     </div>
 
                     <div style={{
-                        color: '#00ff41',
+                        color: '#00e5ff',
                         fontFamily: 'Orbitron',
                         fontSize: '0.9rem',
                         fontWeight: 'bold',
-                        border: '1px solid #00ff41',
+                        border: '1px solid #00e5ff',
                         padding: '4px 15px',
                         background: 'rgba(0,0,0,0.5)',
                         marginLeft: '10px',
-                        textShadow: '0 0 5px #00ff41'
+                        textShadow: '0 0 5px #00e5ff'
                     }}>
                         SCORE: {completedPatterns.length * 25} / 100
                     </div>
@@ -780,7 +780,7 @@ const EditorLayout = ({ userData, onLogout }) => {
                                             cursor: isLocked ? 'not-allowed' : 'pointer',
                                             background: currentPattern?.id === p.id ? '#1e1e1e' : '#111',
                                             color: isLocked ? '#444' : (currentPattern?.id === p.id ? '#fff' : '#888'),
-                                            borderTop: currentPattern?.id === p.id ? '2px solid #00ff41' : '2px solid transparent',
+                                            borderTop: currentPattern?.id === p.id ? '2px solid #00e5ff' : '2px solid transparent',
                                             borderRight: '1px solid #333',
                                             fontSize: '0.8rem',
                                             display: 'flex',
@@ -790,7 +790,7 @@ const EditorLayout = ({ userData, onLogout }) => {
                                             opacity: isLocked ? 0.5 : 1
                                         }}>
                                         <span>{p.name}</span>
-                                        {isCompleted && <span style={{ color: '#00ff41' }}>✔</span>}
+                                        {isCompleted && <span style={{ color: '#00e5ff' }}>✔</span>}
                                         {isLocked && <span style={{ fontSize: '0.8rem' }}>🔒</span>}
                                     </div>
                                 );
@@ -815,11 +815,11 @@ const EditorLayout = ({ userData, onLogout }) => {
                                     display: 'flex', flexDirection: 'column',
                                     justifyContent: 'center', alignItems: 'center',
                                     zIndex: 15,
-                                    border: '1px solid #00ff41',
+                                    border: '1px solid #00e5ff',
                                     backdropFilter: 'grayscale(100%) blur(2px)'
                                 }}>
-                                    <div style={{ fontSize: '3rem', color: '#00ff41', marginBottom: '10px' }}>🔒</div>
-                                    <div style={{ color: '#00ff41', fontFamily: 'Orbitron', fontSize: '1.5rem', letterSpacing: '2px', background: 'black', padding: '10px 20px', border: '1px solid #00ff41' }}>
+                                    <div style={{ fontSize: '3rem', color: '#00e5ff', marginBottom: '10px' }}>🔒</div>
+                                    <div style={{ color: '#00e5ff', fontFamily: 'Orbitron', fontSize: '1.5rem', letterSpacing: '2px', background: 'black', padding: '10px 20px', border: '1px solid #00e5ff' }}>
                                         PATTERN LOCKED
                                     </div>
                                     <div style={{ color: '#aaa', marginTop: '10px', fontFamily: 'Mono' }}>Read-Only Mode</div>
@@ -835,7 +835,7 @@ const EditorLayout = ({ userData, onLogout }) => {
                                     justifyContent: 'center', alignItems: 'center',
                                     zIndex: 25
                                 }}>
-                                    <h1 style={{ color: '#00ff00', fontFamily: 'Orbitron', fontSize: '3rem', animation: 'pulse 0.5s infinite alternate' }}>PATTERN MATCHED</h1>
+                                    <h1 style={{ color: '#00e5ff', fontFamily: 'Orbitron', fontSize: '3rem', animation: 'pulse 0.5s infinite alternate' }}>PATTERN MATCHED</h1>
                                     <h2 style={{ color: '#fff', marginTop: '10px' }}>ACCESS GRANTED &gt;&gt;</h2>
                                 </div>
                             )}
@@ -883,8 +883,8 @@ const EditorLayout = ({ userData, onLogout }) => {
                                     <div className="cyber-grid" style={{
                                         position: 'absolute', width: '200%', height: '200%',
                                         background: `
-                                            linear-gradient(transparent 0%, rgba(0, 255, 65, 0.2) 2%, transparent 5%),
-                                            linear-gradient(90deg, transparent 0%, rgba(0, 255, 65, 0.2) 2%, transparent 5%)
+                                            linear-gradient(transparent 0%, rgba(0, 229, 255, 0.2) 2%, transparent 5%),
+                                            linear-gradient(90deg, transparent 0%, rgba(0, 229, 255, 0.2) 2%, transparent 5%)
                                         `,
                                         backgroundSize: '80px 80px',
                                         transform: 'rotateX(60deg) translateY(-100px) translateZ(-200px)',
@@ -900,10 +900,10 @@ const EditorLayout = ({ userData, onLogout }) => {
 
                                     {/* Main Glitch Text */}
                                     <h1 className="glitch-text" data-text="MISSION ACCOMPLISHED" style={{
-                                        fontSize: '5rem', color: '#00ff41', fontFamily: 'Orbitron', fontWeight: '900',
+                                        fontSize: '5rem', color: '#00e5ff', fontFamily: 'Orbitron', fontWeight: '900',
                                         textTransform: 'uppercase', position: 'relative', zIndex: 10,
                                         letterSpacing: '5px',
-                                        textShadow: '0 0 30px #00ff41'
+                                        textShadow: '0 0 30px #00e5ff'
                                     }}>
                                         MISSION ACCOMPLISHED
                                     </h1>
@@ -917,7 +917,7 @@ const EditorLayout = ({ userData, onLogout }) => {
                                         zIndex: 10
                                     }}>
                                         <div style={{
-                                            border: '2px solid #00ff41',
+                                            border: '2px solid #00e5ff',
                                             padding: '20px 50px',
                                             fontSize: '1.5rem',
                                             fontFamily: 'Orbitron',

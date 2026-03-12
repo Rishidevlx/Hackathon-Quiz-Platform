@@ -56,54 +56,71 @@ const LandingPage = ({ onStart }) => {
             <BackgroundEffect />
             <div className="overlay"></div>
 
-            <header className="landing-header">
-                <h3 className="dept-name">DEPARTMENT OF COMPUTER APPLICATIONS</h3>
-                <h4 className="college-name">AYYA NADAR JANAKI AMMAL COLLEGE (Autonomous)</h4>
-            </header>
-
-            <div
-                ref={containerRef}
-                className="tilt-wrapper"
-                style={{
-                    transform: `perspective(1000px) rotateX(${offset.y * -1}deg) rotateY(${offset.x}deg)`
-                }}
-            >
-                <main className="landing-main">
-                    <h1 className={`qumaze-title ${glitch ? 'glitching' : ''}`} data-text="HACKATHON 2K26">
-                        HACKATHON 2K26
-                    </h1>
-                </main>
-            </div>
-
-            <h2 className="event-subtitle">BCA DEPT - HACKATHON</h2>
-
             {!showCategories ? (
-                <button
-                    className="start-btn"
-                    onClick={() => setShowCategories(true)}
-                    onMouseEnter={handleButtonHover}
-                    onMouseLeave={handleButtonLeave}
-                >
-                    <span className="btn-bracket">[</span>
-                    <span className="btn-text">{displayText}</span>
-                    <span className="btn-bracket">]</span>
-                </button>
-            ) : (
-                <div className="category-selection-overlay">
-                    <div className="category-card ug-card" onClick={() => onStart('UG')}>
-                        <div className="card-glitch-bg"></div>
-                        <div className="card-content">
-                            <h3 className="card-title">UG_PROGRAM</h3>
-                            <p className="card-desc">UNDERGRADUATE CHALLENGE</p>
-                            <span className="card-select">[ SELECT_PATH ]</span>
-                        </div>
+                <>
+                    <header className="landing-header">
+                        <h3 className="dept-name">DEPARTMENT OF COMPUTER APPLICATIONS</h3>
+                        <h4 className="college-name">AYYA NADAR JANAKI AMMAL COLLEGE (Autonomous)</h4>
+                    </header>
+
+                    <div
+                        ref={containerRef}
+                        className="tilt-wrapper"
+                        style={{
+                            transform: `perspective(1000px) rotateX(${offset.y * -1}deg) rotateY(${offset.x}deg)`
+                        }}
+                    >
+                        <main className="landing-main">
+                            <h1 className={`qumaze-title ${glitch ? 'glitching' : ''}`} data-text="HACKATHON 2K26">
+                                HACKATHON 2K26
+                            </h1>
+                            <h2 className="event-subtitle">BCA DEPT - HACKATHON</h2>
+                        </main>
                     </div>
-                    <div className="category-card pg-card" onClick={() => onStart('PG')}>
-                        <div className="card-glitch-bg"></div>
-                        <div className="card-content">
-                            <h3 className="card-title">PG_PROGRAM</h3>
-                            <p className="card-desc">POSTGRADUATE CHALLENGE</p>
-                            <span className="card-select">[ SELECT_PATH ]</span>
+
+                    <button
+                        className="start-btn"
+                        onClick={() => setShowCategories(true)}
+                        onMouseEnter={handleButtonHover}
+                        onMouseLeave={handleButtonLeave}
+                    >
+                        <span className="btn-bracket">[</span>
+                        <span className="btn-text">{displayText}</span>
+                        <span className="btn-bracket">]</span>
+                    </button>
+                </>
+            ) : (
+                <div className="category-page">
+                    <button className="back-btn" onClick={() => setShowCategories(false)}>
+                        &lt; BACK_TO_MAIN
+                    </button>
+                    
+                    <div className="category-header">
+                        <h2 className="category-title">SELECT_YOUR_PATH</h2>
+                        <div className="title-underline"></div>
+                    </div>
+
+                    <div className="category-list">
+                        <div className="category-card-rect ug-card" onClick={() => onStart('UG')}>
+                            <div className="card-indicator">01</div>
+                            <div className="card-info">
+                                <h3 className="card-title">UG_PROGRAM</h3>
+                                <p className="card-desc">UNDERGRADUATE CHALLENGE SECTOR</p>
+                            </div>
+                            <div className="card-action">
+                                <span className="action-text">INITIALIZE</span>
+                            </div>
+                        </div>
+
+                        <div className="category-card-rect pg-card" onClick={() => onStart('PG')}>
+                            <div className="card-indicator">02</div>
+                            <div className="card-info">
+                                <h3 className="card-title">PG_PROGRAM</h3>
+                                <p className="card-desc">POSTGRADUATE CHALLENGE SECTOR</p>
+                            </div>
+                            <div className="card-action">
+                                <span className="action-text">INITIALIZE</span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -26,7 +26,7 @@ const BackgroundEffect = () => {
                 this.density = (Math.random() * 30) + 1;
                 this.speedX = Math.random() * 1 - 0.5; // Drift speed
                 this.speedY = Math.random() * 1 - 0.5;
-                this.color = '#00ff41'; // Matrix Green
+                this.color = '#00e5ff'; // Neon Blue
             }
 
             update() {
@@ -87,7 +87,7 @@ const BackgroundEffect = () => {
 
                     if (distance < 150) {
                         opacityValue = 1 - (distance / 150);
-                        ctx.strokeStyle = 'rgba(0, 255, 65, ' + opacityValue + ')';
+                        ctx.strokeStyle = 'rgba(0, 229, 255, ' + opacityValue + ')';
                         ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(particles[a].x, particles[a].y);
