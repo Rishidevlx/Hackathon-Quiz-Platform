@@ -1,179 +1,161 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LandingPage.css';
 import BackgroundEffect from './BackgroundEffect';
 
 const LandingPage = ({ onStart }) => {
-    const [glitch, setGlitch] = useState(false);
     const [showCategories, setShowCategories] = useState(false);
-    const [displayText, setDisplayText] = useState('START_SYSTEM');
-    const [titleText, setTitleText] = useState('HACKATHON 2K26');
-    const originalBtnText = 'START_SYSTEM';
-    const originalTitle = 'HACKATHON 2K26';
-    const containerRef = useRef(null);
+    const [scrambledTitle, setScrambledTitle] = useState('');
+    const [showSub, setShowSub] = useState(false);
+    const [logs, setLogs] = useState([]);
+    
+    const fullTitle = "HACKATHON 2K26";
+    const terminalLines = [
+        "> INITIATING_SECURE_AUTH...",
+        "> LOADING_VIRTUAL_ENV [OK]",
+        "> CONNECTING_TIDB_CLUSTER [OK]",
+        "> BYPASSING_FIREWALL... ACCESS_GRANTED",
+        "> BCA_DEPT_PROTOCOL_ACTIVE",
+        "> SYSTEM_VERSION_2.0.4_READY"
+    ];
 
-    const [offset, setOffset] = useState({ x: 0, y: 0 });
-
-    // Title Scramble Effect on Load
     useEffect(() => {
-        let iterations = 0;
-        const interval = setInterval(() => {
-            setTitleText(prev =>
-                prev.split('').map((letter, index) => {
-                    if (index < iterations) return originalTitle[index];
-                    return "X01_#$@%&*"[Math.floor(Math.random() * 10)];
-                }).join('')
+        // Scramble Title Animation
+        let interval;
+        let iteration = 0;
+        
+        interval = setInterval(() => {
+            setScrambledTitle(
+                fullTitle.split("")
+                    .map((char, index) => {
+                        if (index < iteration) return fullTitle[index];
+                        return "X01#$@%&*"[Math.floor(Math.random() * 9)];
+                    }).join("")
             );
-            if (iterations >= originalTitle.length) clearInterval(interval);
-            iterations += 1 / 3;
+            
+            if (iteration >= fullTitle.length) {
+                clearInterval(interval);
+                setShowSub(true);
+            }
+            iteration += 1/3;
         }, 50);
-        return () => clearInterval(interval);
+
+        // Terminal Log Animation
+        let logIndex = 0;
+        const logInterval = setInterval(() => {
+            if (logIndex < terminalLines.length) {
+                setLogs(prev => [...prev.slice(-5), terminalLines[logIndex]]);
+                logIndex++;
+            }
+        }, 800);
+
+        return () => {
+            clearInterval(interval);
+            clearInterval(logInterval);
+        };
     }, []);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setGlitch(true);
-            setTimeout(() => setGlitch(false), 150);
-        }, 4000);
-        return () => clearInterval(interval);
-    }, []);
-
-    const handleMouseMove = (e) => {
-        if (!containerRef.current) return;
-        const { width, height, left, top } = containerRef.current.getBoundingClientRect();
-        const x = e.clientX - left - width / 2;
-        const y = e.clientY - top - height / 2;
-
-        setOffset({
-            x: (x / width) * 15,
-            y: (y / height) * 15
-        });
-    };
-
-    const handleButtonHover = () => {
-        let iterations = 0;
-        const interval = setInterval(() => {
-            setDisplayText(prev =>
-                prev.split('').map((letter, index) => {
-                    if (index < iterations) return originalBtnText[index];
-                    return "XY01#$@%&*"[Math.floor(Math.random() * 10)];
-                }).join('')
-            );
-            if (iterations >= originalBtnText.length) clearInterval(interval);
-            iterations += 1 / 2;
-        }, 30);
-    };
-
-    const handleButtonLeave = () => {
-        setDisplayText(originalBtnText);
-    };
 
     return (
-        <div className="landing-container" onMouseMove={handleMouseMove}>
+        <div className="landing-container">
             <BackgroundEffect />
-            <div className="overlay"></div>
+            <div className="vignette-overlay"></div>
+            <div className="scanline-overlay"></div>
 
             {!showCategories ? (
-                <>
-                    <header className="landing-header">
-                        <div className="sys-status">
-                            <span className="status-dot pulse"></span>
-                            <span className="status-text">SERVER_LOC: AP-SOUTHEAST-1</span>
-                        </div>
-                        <h3 className="dept-name">DEPARTMENT OF COMPUTER APPLICATIONS</h3>
-                        <h4 className="college-name">AYYA NADAR JANAKI AMMAL COLLEGE (Autonomous)</h4>
-                    </header>
-
-                    <div
-                        ref={containerRef}
-                        className="tilt-wrapper"
-                        style={{
-                            transform: `perspective(1000px) rotateX(${offset.y * -1}deg) rotateY(${offset.x}deg)`
-                        }}
-                    >
-                        <main className="landing-main">
-                            <div className="cyber-frame">
-                                <div className="frame-corner top-left"></div>
-                                <div className="frame-corner top-right"></div>
-                                <div className="frame-corner bottom-left"></div>
-                                <div className="frame-corner bottom-right"></div>
-                                
-                                <div className="scanner-line-vertical"></div>
-                                
-                                <h1 className={`qumaze-title ${glitch ? 'glitching' : ''}`} data-text={titleText}>
-                                    {titleText}
-                                </h1>
-                                <div className="title-sub">BCA DEPT // AUTH_PROTOCOL: 2.0.1</div>
-                            </div>
-                            
-                            <h2 className="event-subtitle">
-                                <span className="subtitle-glitch">BCA DEPT - HACKATHON</span>
-                            </h2>
-                        </main>
+                <div className="main-viewport">
+                    {/* Left: System Logs */}
+                    <div className="system-logs">
+                        {logs.map((log, i) => (
+                            <div key={i} className="log-line">{log}</div>
+                        ))}
                     </div>
 
-                    <div className="hacker-decorations">
-                        <div className="decor-item">PROTOCOL: SECURE_SOCKET</div>
-                        <div className="decor-item">IP_HASH: 0x4F5E6A</div>
-                        <div className="decor-item">LATENCY: 12ms</div>
+                    {/* Right: Technical Badges */}
+                    <div className="tech-badges">
+                        <div className="badge">SEC_STATE: ENCRYPTED</div>
+                        <div className="badge">UPTIME: 99.9%</div>
+                        <div className="badge">LOCATION: RM_04_BCA</div>
                     </div>
 
-                    <button
-                        className="start-btn"
-                        onClick={() => setShowCategories(true)}
-                        onMouseEnter={handleButtonHover}
-                        onMouseLeave={handleButtonLeave}
-                    >
-                        <span className="btn-bracket">[</span>
-                        <span className="btn-text">{displayText}</span>
-                        <span className="btn-bracket">]</span>
-                        <div className="btn-glow"></div>
-                    </button>
-                </>
-            ) : (
-                <div className="category-page">
-                    <button className="back-btn" onClick={() => setShowCategories(false)}>
-                        &lt; TERMINATE_PATH
-                    </button>
-                    
-                    <div className="category-header">
-                        <h2 className="category-title">SELECT_CHALLENGE_SECTOR</h2>
-                        <div className="category-subtitle">VIRTUAL_ENVIRONMENT: INITIALIZED</div>
-                        <div className="title-underline"></div>
-                    </div>
+                    {/* Center Content */}
+                    <div className="center-content">
+                        <header className="header-meta">
+                            <span className="meta-line">AYYA NADAR JANAKI AMMAL COLLEGE</span>
+                            <span className="meta-line highlight">BCA DEPARTMENT SPECIAL UNIT</span>
+                        </header>
 
-                    <div className="category-list">
-                        <div className="category-card-rect ug-card" onClick={() => onStart('UG')}>
-                            <div className="card-indicator">01</div>
-                            <div className="card-info">
-                                <h3 className="card-title">UG_PROGRAM</h3>
-                                <p className="card-desc">CORE_LOGIC & PATTERN_MATCHING SYSTEM</p>
-                            </div>
-                            <div className="card-action">
-                                <span className="action-text">INITIALIZE_LINK</span>
-                            </div>
-                            <div className="card-glow"></div>
+                        <div className="title-reconstruction">
+                            <h1 className="main-title" data-text={scrambledTitle}>
+                                {scrambledTitle}
+                            </h1>
+                            {showSub && (
+                                <div className="sub-header-container">
+                                    <div className="line-dec"></div>
+                                    <span className="sub-text">CHALLENGE_YOUR_LIMITS</span>
+                                    <div className="line-dec"></div>
+                                </div>
+                            )}
                         </div>
 
-                        <div className="category-card-rect pg-card" onClick={() => onStart('PG')}>
-                            <div className="card-indicator">02</div>
-                            <div className="card-indicator-sub">PG_CORE</div>
-                            <div className="card-info">
-                                <h3 className="card-title">PG_PROGRAM</h3>
-                                <p className="card-desc">ADVANCED_ALGORITHMIC_VECTORS</p>
-                            </div>
-                            <div className="card-action">
-                                <span className="action-text">INITIALIZE_LINK</span>
-                            </div>
-                            <div className="card-glow"></div>
+                        <div className="call-to-action">
+                            <button className="hacker-btn" onClick={() => setShowCategories(true)}>
+                                <div className="btn-content">
+                                    <span className="btn-glitch-text">ACCESS_SYSTEM</span>
+                                    <span className="btn-icon">_&gt;</span>
+                                </div>
+                                <div className="btn-border"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Bottom: Ticker Decoration */}
+                    <div className="bottom-ticker">
+                        <div className="ticker-track">
+                                BCA_HACKATHON_2026 // CODE_MATCHING // LOGIC_TEST // SYSTEM_LOCKED // PERSIST_DATA // 
+                                BCA_HACKATHON_2026 // CODE_MATCHING // LOGIC_TEST // SYSTEM_LOCKED // PERSIST_DATA // 
                         </div>
                     </div>
                 </div>
+            ) : (
+                <div className="category-section">
+                    <div className="category-header">
+                        <h2 className="title-glow">SECTOR_SELECTION</h2>
+                        <div className="path-indicator">PATH: ROOT/SELECTION</div>
+                    </div>
+
+                    <div className="category-grid">
+                        <div className="rect-card" onClick={() => onStart('UG')}>
+                            <div className="card-top">SECTOR_01</div>
+                            <div className="card-body">
+                                <h3>UG_LEVEL</h3>
+                                <p>FOUNDATIONAL ALGORITHMS & PATTERN SYNTHESIS</p>
+                                <div className="card-status">STATUS: ONLINE</div>
+                            </div>
+                            <div className="card-foot">INITIALIZE_PATH_&gt;&gt;</div>
+                        </div>
+
+                        <div className="rect-card" onClick={() => onStart('PG')}>
+                            <div className="card-top">SECTOR_02</div>
+                            <div className="card-body">
+                                <h3>PG_LEVEL</h3>
+                                <p>ADVANCED DATA VECTORS & LOGIC ARCHITECTURE</p>
+                                <div className="card-status">STATUS: ONLINE</div>
+                            </div>
+                            <div className="card-foot">INITIALIZE_PATH_&gt;&gt;</div>
+                        </div>
+                    </div>
+
+                    <button className="terminate-btn" onClick={() => setShowCategories(false)}>
+                        [ TERMINATE_SELECTION ]
+                    </button>
+                </div>
             )}
-            
-            <footer className="landing-footer">
-                <div className="sys-info">SYSTEM_v2.0 // DEPLOYED: {new Date().toLocaleDateString()}</div>
-                <div className="sec-warning">CAUTION: AUTHORIZED ACCESS ONLY. ALL ACTIVITIES RECORDED.</div>
-            </footer>
+
+            <div className="frame-decoration">
+                <div className="corner-decor tl"></div>
+                <div className="corner-decor tr"></div>
+                <div className="corner-decor bl"></div>
+                <div className="corner-decor br"></div>
+            </div>
         </div>
     );
 };
