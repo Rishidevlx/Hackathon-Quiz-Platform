@@ -8,7 +8,8 @@ const BackgroundEffect = () => {
         const ctx = canvas.getContext('2d');
         let animationFrameId;
         let particles = [];
-        let mouse = { x: null, y: null, radius: 150 };
+        let pulses = [];
+        let mouse = { x: null, y: null, radius: 200 };
 
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
@@ -18,117 +19,128 @@ const BackgroundEffect = () => {
 
         class Particle {
             constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 2 + 1;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = (Math.random() * 30) + 1;
-                this.speedX = Math.random() * 1 - 0.5; // Drift speed
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = '#00e5ff'; // Neon Blue
+                this.x = x || Math.random() * canvas.width;
+                this.y = y || Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.color = '#00e5ff';
+                this.connections = [];
             }
 
             update() {
-                // Mouse reaction logic
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let forceDirectionX = dx / distance;
-                let forceDirectionY = dy / distance;
-                let maxDistance = mouse.radius;
-                let force = (maxDistance - distance) / maxDistance;
-                let directionX = forceDirectionX * force * this.density;
-                let directionY = forceDirectionY * force * this.density;
+                this.x += this.speedX;
+                this.y += this.speedY;
 
-                if (distance < mouse.radius) {
-                    // Push away from mouse
-                    this.x -= directionX;
-                    this.y -= directionY;
-                } else {
-                    // Return to original position (drift)
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-
-                    // Wrap around screen
-                    if (this.x < 0) this.x = canvas.width;
-                    if (this.x > canvas.width) this.x = 0;
-                    if (this.y < 0) this.y = canvas.height;
-                    if (this.y > canvas.height) this.y = 0;
-                }
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
             }
 
             draw() {
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        class Pulse {
+            constructor(startNode, endNode) {
+                this.startNode = startNode;
+                this.endNode = endNode;
+                this.progress = 0;
+                this.speed = Math.random() * 0.02 + 0.01;
+            }
+
+            update() {
+                this.progress += this.speed;
+                return this.progress < 1;
+            }
+
+            draw() {
+                const x = this.startNode.x + (this.endNode.x - this.startNode.x) * this.progress;
+                const y = this.startNode.y + (this.endNode.y - this.startNode.y) * this.progress;
+
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, 4);
+                gradient.addColorStop(0, '#fff');
+                gradient.addColorStop(0.5, '#00e5ff');
+                gradient.addColorStop(1, 'transparent');
+
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
         const initParticles = () => {
             particles = [];
-            const numberOfParticles = (canvas.width * canvas.height) / 9000;
-            for (let i = 0; i < numberOfParticles; i++) {
-                let x = Math.random() * canvas.width;
-                let y = Math.random() * canvas.height;
-                particles.push(new Particle(x, y));
+            const count = Math.floor((canvas.width * canvas.height) / 12000);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
             }
         };
 
-        const connect = () => {
-            let opacityValue = 1;
-            for (let a = 0; a < particles.length; a++) {
-                for (let b = a; b < particles.length; b++) {
-                    let dx = particles[a].x - particles[b].x;
-                    let dy = particles[a].y - particles[b].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
+        const drawConnections = () => {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    if (distance < 150) {
-                        opacityValue = 1 - (distance / 150);
-                        ctx.strokeStyle = 'rgba(0, 229, 255, ' + opacityValue + ')';
-                        ctx.lineWidth = 1;
+                    if (dist < 180) {
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${1 - dist / 180})`;
+                        ctx.lineWidth = 0.5;
                         ctx.beginPath();
-                        ctx.moveTo(particles[a].x, particles[a].y);
-                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
                         ctx.stroke();
+
+                        // Occasionally spawn a pulse
+                        if (Math.random() < 0.001) {
+                            pulses.push(new Pulse(particles[i], particles[j]));
+                        }
                     }
                 }
             }
         };
 
         const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // Trail effect
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            drawConnections();
+
+            pulses = pulses.filter(pulse => {
+                pulse.draw();
+                return pulse.update();
+            });
+
+            // Binary background overlay (very subtle)
+            ctx.fillStyle = 'rgba(0, 229, 255, 0.03)';
+            ctx.font = '10px Courier New';
+            for (let i = 0; i < 20; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                ctx.fillText(Math.random() > 0.5 ? '1' : '0', x, y);
             }
-            connect();
+
             animationFrameId = requestAnimationFrame(animate);
         };
 
-        const handleMouseMove = (event) => {
-            mouse.x = event.x;
-            mouse.y = event.y;
-        }
-
-        const handleMouseLeave = () => {
-            mouse.x = undefined;
-            mouse.y = undefined;
-        }
-
         window.addEventListener('resize', resizeCanvas);
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseout', handleMouseLeave);
-
         resizeCanvas();
         animate();
 
         return () => {
             window.removeEventListener('resize', resizeCanvas);
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseout', handleMouseLeave);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);
