@@ -77,10 +77,18 @@
 .badge {
     background: rgba(0, 229, 255, 0.05);
     border: 1px solid rgba(0, 229, 255, 0.2);
-    padding: 3px 12px;
-    font-size: 0.65rem;
+    padding: 4px 15px;
+    font-size: 0.7rem;
     font-family: var(--font-code);
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+    animation: badgePulse 2s infinite alternate;
+}
+
+@keyframes badgePulse {
+    0% { border-color: rgba(0, 229, 255, 0.2); box-shadow: 0 0 5px rgba(0, 229, 255, 0.1); }
+    100% { border-color: rgba(0, 229, 255, 0.6); box-shadow: 0 0 15px rgba(0, 229, 255, 0.3); }
 }
 
 /* Center Content */
@@ -90,22 +98,26 @@
 }
 
 .header-meta {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    letter-spacing: 5px;
+    gap: 8px;
+    letter-spacing: 8px;
+    animation: slideDownFade 1s ease-out;
 }
 
 .meta-line {
-    font-size: 0.8rem;
-    color: #444;
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 500;
 }
 
 .meta-line.highlight {
+    font-size: 1.4rem;
     color: var(--color-neon-cyan);
-    text-shadow: 0 0 10px var(--color-neon-cyan);
-    font-weight: bold;
+    text-shadow: 0 0 15px var(--color-neon-cyan), 0 0 30px rgba(0, 229, 255, 0.4);
+    font-weight: 700;
+    letter-spacing: 12px;
 }
 
 .main-title {
@@ -361,4 +373,33 @@
 @keyframes slideUpFade {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Holographic Noise Overlay */
+.landing-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Vertical Data Streams */
+.data-stream {
+    position: absolute;
+    top: -100px;
+    width: 1px;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, var(--color-neon-cyan));
+    animation: streamDrop 3s linear infinite;
+    z-index: 1;
+}
+
+@keyframes streamDrop {
+    0% { transform: translateY(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0; }
 }

@@ -59,6 +59,12 @@ const LandingPage = ({ onStart }) => {
             <BackgroundEffect />
             <div className="vignette-overlay"></div>
             <div className="scanline-overlay"></div>
+            
+            {/* Added for background activity */}
+            <div className="data-stream" style={{ left: '10%', animationDelay: '0s' }}></div>
+            <div className="data-stream" style={{ left: '30%', animationDelay: '1.5s' }}></div>
+            <div className="data-stream" style={{ left: '70%', animationDelay: '0.8s' }}></div>
+            <div className="data-stream" style={{ left: '90%', animationDelay: '2.2s' }}></div>
 
             {!showCategories ? (
                 <div className="main-viewport">
